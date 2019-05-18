@@ -62,5 +62,6 @@ for pch in $(cd "${PDIR}" && ls -1 *.patch); do
     (cd "${SDKDIR}"; patch --no-backup-if-mismatch -p1 < "${PDIR}/${pch}");
     RC=$?
     [ ${UNIX2DOS} -ne 0 ] && (cd "${SDKDIR}"; unix2dos -q ${srcs})
-    [ ${RC} -ne 0 ] && die ""
+    [ ${RC} -ne 0 ] && die "Patch failed."
 done
+echo "Done with all patches."

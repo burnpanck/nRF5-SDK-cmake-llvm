@@ -11,7 +11,8 @@ from os.path import (basename, dirname, isdir, join as joinpath, normpath,
 from re import compile as recompile
 from subprocess import Popen, TimeoutExpired, PIPE
 from sys import modules, stderr
-from tempfile import mkstemp
+import tempfile
+from io import StringIO
 from traceback import format_exc
 
 
@@ -261,14 +262,13 @@ def main():
                             basename(filename).upper().replace('.', '_')
                         with open(filename, 'rt') as ifp:
                             content = ifp.read()
-                        # use a temporary filename to ensure file is only
+                        # use a memory buffer to ensure file is only
                         # updated if it can be properly generated
-                        ofd, ofname = mkstemp()
-                        with open(ofd, 'wt') as ofp:
-                            ofp.write(content)
-                            nrf.generate(ofp, hprot=hprot)
-                            ofp.close()
-                        rename(ofname, filename)
+                        tfp = StringIO()
+                        tfp.write(content)
+                        nrf.generate(tfp, hprot=hprot)
+                        with open(filename, 'wt') as ofp:
+                            ofp.write(tfp.getvalue())
                     else:
                         print("%s needs upgrade: %d syscalls" %
                               (relpath(filename), count), file=stderr)
