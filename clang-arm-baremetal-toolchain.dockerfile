@@ -1,4 +1,4 @@
-# run with docker build -f nRF52-SDK-15.3-clang.dockerfile -t "burnpanck/nrf52-sdk-clang:15.3.0"
+# run with "docker build -f clang-arm-baremetal-toolchain.dockerfile -t clang-arm-baremetal-toolchain ."
 FROM ubuntu:18.04 as build
 
 RUN apt-get -q update && \

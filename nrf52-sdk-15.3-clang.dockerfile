@@ -1,4 +1,4 @@
-# run with docker build -f nrf52-sdk-15.3-clang.dockerfile -t "burnpanck/nrf52-sdk-clang:15.3.0"
+# run with "docker build -f nrf52-sdk-15.3-clang.dockerfile -t nrf52-sdk-clang:15.3.0"
 FROM ubuntu:18.04 as build
 
 RUN apt-get -q update && \
