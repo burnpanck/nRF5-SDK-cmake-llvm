@@ -2,6 +2,13 @@
 
 Tools &amp; patches to build nRF5 SDK with LLVM/Clang toolchain
 
+- `nRF52-SDK-15.3-clang.dockerfile` is a dockerfile that applies all patches,
+  and builds a docker image ready for use with clang.
+  However, as it turns out, one still has to use the GCC toolchain,
+  which lacks a recent libstdc++, and has not libc++ at all.
+- `clang-arm-baremetal-toolchain.dockerfile` attempts to build a LLVM toolchain
+  from scratch. It doesn't seem to work as of now.
+
 ## Overview
 
 This repository contains some tools and patches so that the Nordic Semi
@@ -137,3 +144,9 @@ use of barely appropriate ZIP container.
   such as `ldr r0,=#1234`, but the LLVM integrated assembler does not accept
   the `=#` syntax as an immediate value. The instruction is replaced with two
   ARM `mov` instructions.
+* `remove-register-keyword.patch`: This follows a patch that has been accepted
+  upstream at CMSIS. In C++, the `register` keyword has no effect, was deprecated
+  in C++14 and forbidden in C++17. This patch simply removes it.
+* `fix-builtin.patch`: Fixes one place that triggers a warning in clang,
+  and an error in clang++.
+  

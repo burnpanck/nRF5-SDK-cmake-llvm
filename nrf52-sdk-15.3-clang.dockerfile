@@ -1,4 +1,4 @@
-# run with docker build -f nRF52-SDK-15.3-clang.dockerfile -t "burnpanck/nrf52-sdk-clang:15.3.0"
+# run with docker build -f nrf52-sdk-15.3-clang.dockerfile -t "burnpanck/nrf52-sdk-clang:15.3.0"
 FROM ubuntu:18.04 as build
 
 RUN apt-get -q update && \
@@ -15,7 +15,7 @@ RUN rm ${SDK_FILE}.zip
 # RUN mv ${SDK_FILE} nRF5_SDK
 RUN cp -r ${SDK_FILE} nRF5_SDK && rm -rf ${SDK_FILE}
 
-# TODO: remove unnecessary items, such as Keil/IAR files, *.msi, examples?
+# TODO: remove unnecessary items, such as Keil/IAR files, *.msi, examples?, external_tools
 
 # now, patch it
 COPY nrfsvc.py nrfpatch.sh *.patch ./
