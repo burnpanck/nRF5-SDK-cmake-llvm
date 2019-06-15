@@ -22,7 +22,7 @@
 +         #define GET_SP()                clang_current_sp()
 +         static inline unsigned int clang_current_sp(void)
 +         {
-+             return __builtin___get_unsafe_stack_ptr();
++             return (unsigned int)__builtin___get_unsafe_stack_ptr();
 +         }
 +   #endif
 

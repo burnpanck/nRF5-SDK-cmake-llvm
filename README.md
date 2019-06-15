@@ -1,3 +1,12 @@
+# Repository
+
+## Branches
+ - `nordic`: Contains the unmodified original Nordic nRF5 SDK.
+   Downloaded using `tools/download-sdk.sh`
+ - `patched`: Contains the SDK patched such that it compiles using llvm.
+   Obtained by running `tools/patch-sdk.sh` on a unmodified sdk.
+Other branches may contain various modification, extensions and improvements.
+
 # nrf5-llvm
 
 Tools &amp; patches to build nRF5 SDK with LLVM/Clang toolchain

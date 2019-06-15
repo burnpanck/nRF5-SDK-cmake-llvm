@@ -1,6 +1,6 @@
 --- a/components/toolchain/cmsis/include/cmsis_gcc.h
 +++ b/components/toolchain/cmsis/include/cmsis_gcc.h
-@@ -332,13 +332,19 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_FPSCR(void)
+@@ -332,13 +332,30 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_FPSCR(void)
    \details Assigns the given value to the Floating Point Status/Control register.
    \param [in]    fpscr  Floating Point Status/Control value to set
   */
@@ -17,24 +17,23 @@
 +     (defined (__FPU_USED   ) && (__FPU_USED    == 1U))     )
 +  /* A separate test for Clang and GCC is needed, because the preprocessor
 +     of the latter chokes on the __has_builtin with a syntax error. */
-+# ifndef __clang__
-+#  if (__GNUC__ > 7) || (__GNUC__ == 7 && __GNUC_MINOR__ >= 1)
++#ifndef __clang__
++# if (__GNUC__ > 7) || (__GNUC__ == 7 && __GNUC_MINOR__ >= 1)
 +  /* see https://gcc.gnu.org/ml/gcc-patches/2017-04/msg00443.html */
 +  __builtin_arm_set_fpscr(fpscr);
-+#  else
-+  __ASM volatile ("VMSR fpscr, %0" : : "r" (fpscr) : "vfpcc", "memory");
-+#  endif
 +# else
-+#  if __has_builtin(__builtin_arm_set_fpscr)
++  __ASM volatile ("VMSR fpscr, %0" : : "r" (fpscr) : "vfpcc", "memory");
++# endif
++#else
++# if __has_builtin(__builtin_arm_set_fpscr)
 +  /* see https://gcc.gnu.org/ml/gcc-patches/2017-04/msg00443.html */
 +  __builtin_arm_set_fpscr(fpscr);
-+#  else
++# else
 +  __ASM volatile ("VMSR fpscr, %0" : : "r" (fpscr) : "vfpcc", "memory");
-+#  endif
 +# endif
++#endif
 +#else
 +#  error No FPSCR
 +  (void)fpscr;
  #endif
  }
- 
