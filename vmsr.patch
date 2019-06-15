@@ -15,11 +15,22 @@
 +{
 +#if ((defined (__FPU_PRESENT) && (__FPU_PRESENT == 1U)) && \
 +     (defined (__FPU_USED   ) && (__FPU_USED    == 1U))     )
-+# if __has_builtin(__builtin_arm_set_fpscr) || (__GNUC__ > 7) || (__GNUC__ == 7 && __GNUC_MINOR__ >= 1)
++  /* A separate test for Clang and GCC is needed, because the preprocessor
++     of the latter chokes on the __has_builtin with a syntax error. */
++# ifndef __clang__
++#  if (__GNUC__ > 7) || (__GNUC__ == 7 && __GNUC_MINOR__ >= 1)
 +  /* see https://gcc.gnu.org/ml/gcc-patches/2017-04/msg00443.html */
 +  __builtin_arm_set_fpscr(fpscr);
-+# else
++#  else
 +  __ASM volatile ("VMSR fpscr, %0" : : "r" (fpscr) : "vfpcc", "memory");
++#  endif
++# else
++#  if __has_builtin(__builtin_arm_set_fpscr)
++  /* see https://gcc.gnu.org/ml/gcc-patches/2017-04/msg00443.html */
++  __builtin_arm_set_fpscr(fpscr);
++#  else
++  __ASM volatile ("VMSR fpscr, %0" : : "r" (fpscr) : "vfpcc", "memory");
++#  endif
 +# endif
 +#else
 +#  error No FPSCR
