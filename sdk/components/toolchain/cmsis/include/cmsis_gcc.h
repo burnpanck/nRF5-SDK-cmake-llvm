@@ -147,7 +147,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_xPSR(void)
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_PSP(void)
 {
-  register uint32_t result;
+  uint32_t result;
 
   __ASM volatile ("MRS %0, psp\n"  : "=r" (result) );
   return(result);
@@ -172,7 +172,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_PSP(uint32_t topOf
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_MSP(void)
 {
-  register uint32_t result;
+  uint32_t result;
 
   __ASM volatile ("MRS %0, msp\n" : "=r" (result) );
   return(result);
@@ -332,13 +332,30 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_FPSCR(void)
   \details Assigns the given value to the Floating Point Status/Control register.
   \param [in]    fpscr  Floating Point Status/Control value to set
  */
-__attribute__( ( always_inline ) ) __STATIC_INLINE void __set_FPSCR(uint32_t fpscr)
+__attribute__((always_inline)) __STATIC_INLINE void __set_FPSCR(uint32_t fpscr)
 {
-#if (__FPU_PRESENT == 1U) && (__FPU_USED == 1U)
-  /* Empty asm statement works as a scheduling barrier */
-  __ASM volatile ("");
-  __ASM volatile ("VMSR fpscr, %0" : : "r" (fpscr) : "vfpcc");
-  __ASM volatile ("");
+#if ((defined (__FPU_PRESENT) && (__FPU_PRESENT == 1U)) && \
+     (defined (__FPU_USED   ) && (__FPU_USED    == 1U))     )
+  /* A separate test for Clang and GCC is needed, because the preprocessor
+     of the latter chokes on the __has_builtin with a syntax error. */
+#ifndef __clang__
+# if (__GNUC__ > 7) || (__GNUC__ == 7 && __GNUC_MINOR__ >= 1)
+  /* see https://gcc.gnu.org/ml/gcc-patches/2017-04/msg00443.html */
+  __builtin_arm_set_fpscr(fpscr);
+# else
+  __ASM volatile ("VMSR fpscr, %0" : : "r" (fpscr) : "vfpcc", "memory");
+# endif
+#else
+# if __has_builtin(__builtin_arm_set_fpscr)
+  /* see https://gcc.gnu.org/ml/gcc-patches/2017-04/msg00443.html */
+  __builtin_arm_set_fpscr(fpscr);
+# else
+  __ASM volatile ("VMSR fpscr, %0" : : "r" (fpscr) : "vfpcc", "memory");
+# endif
+#endif
+#else
+#  error No FPSCR
+  (void)fpscr;
 #endif
 }
 

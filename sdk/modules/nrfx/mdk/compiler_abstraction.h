@@ -139,13 +139,21 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         #define __PACKED           __attribute__((packed)) 
     #endif
 
-    #define GET_SP()                gcc_current_sp()
+    #if !defined(__clang__)
+         #define GET_SP()                gcc_current_sp()
 
-    static inline unsigned int gcc_current_sp(void)
-    {
-        register unsigned sp __ASM("sp");
-        return sp;
-    }
+         static inline unsigned int gcc_current_sp(void)
+         {
+             register unsigned sp __ASM("sp");
+             return sp;
+         }
+   #else
+         #define GET_SP()                clang_current_sp()
+         static inline unsigned int clang_current_sp(void)
+         {
+             return (unsigned int)__builtin___get_unsafe_stack_ptr();
+         }
+   #endif
 
 #elif defined   ( __TASKING__ )
 
