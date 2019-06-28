@@ -12,31 +12,31 @@ if(cli_cdc_acm_needed OR (cli_cdc_acm IN_LIST components))
     set(cli_cdc_acm_needed YES)
     # Dependencies:
     set(cli_api_needed YES)
+    set(queue_needed YES)
     set(usbd_class_cdc_acm_needed YES)
     set(util_needed YES)
-    set(queue_needed YES)
 endif()
 
 # Build dependencies of component "usbd_class_cdc_acm"
 if(usbd_class_cdc_acm_needed OR (usbd_class_cdc_acm IN_LIST components))
     set(usbd_class_cdc_acm_needed YES)
     # Dependencies:
-    set(usbd_core_needed YES)
     set(drv_usbd_needed YES)
-    set(usbd_class_cdc_needed YES)
-    set(util_needed YES)
     set(log_api_needed YES)
+    set(usbd_class_cdc_needed YES)
+    set(usbd_core_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "usbd_class_msc"
 if(usbd_class_msc_needed OR (usbd_class_msc IN_LIST components))
     set(usbd_class_msc_needed YES)
     # Dependencies:
-    set(usbd_core_needed YES)
     set(block_dev_needed YES)
     set(drv_usbd_needed YES)
-    set(util_needed YES)
     set(log_api_needed YES)
+    set(usbd_core_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "usbd_class_cdc"
@@ -50,67 +50,67 @@ endif()
 if(log_backend_uart_needed OR (log_backend_uart IN_LIST components))
     set(log_backend_uart_needed YES)
     # Dependencies:
-    set(log_ctrl_needed YES)
     set(drv_uart_needed YES)
-    set(util_needed YES)
     set(log_api_needed YES)
     set(log_backend_serial_needed YES)
+    set(log_ctrl_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "log_backend_rtt"
 if(log_backend_rtt_needed OR (log_backend_rtt IN_LIST components))
     set(log_backend_rtt_needed YES)
     # Dependencies:
-    set(log_ctrl_needed YES)
+    set(delay_needed YES)
     set(log_needed YES)
-    set(segger_rtt_needed YES)
     set(log_api_needed YES)
     set(log_backend_serial_needed YES)
+    set(log_ctrl_needed YES)
+    set(segger_rtt_needed YES)
     set(util_needed YES)
-    set(delay_needed YES)
 endif()
 
 # Build dependencies of component "usbd_core"
 if(usbd_core_needed OR (usbd_core IN_LIST components))
     set(usbd_core_needed YES)
     # Dependencies:
-    set(drv_usbd_needed YES)
-    set(util_needed YES)
-    set(mdk_needed YES)
-    set(drv_power_needed YES)
-    set(atomic_fifo_needed YES)
     set(atomic_needed YES)
+    set(atomic_fifo_needed YES)
+    set(config_needed YES)
+    set(drv_clock_needed YES)
+    set(drv_power_needed YES)
+    set(drv_usbd_needed YES)
     set(hal_power_needed YES)
     set(log_api_needed YES)
-    set(drv_clock_needed YES)
+    set(mdk_needed YES)
     set(utf_converter_needed YES)
-    set(config_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "log_backend_serial"
 if(log_backend_serial_needed OR (log_backend_serial IN_LIST components))
     set(log_backend_serial_needed YES)
     # Dependencies:
-    set(log_ctrl_needed YES)
     set(fprintf_needed YES)
     set(log_needed YES)
-    set(util_needed YES)
     set(log_api_needed YES)
+    set(log_ctrl_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "log_backend_flash"
 if(log_backend_flash_needed OR (log_backend_flash IN_LIST components))
     set(log_backend_flash_needed YES)
     # Dependencies:
-    set(log_api_needed YES)
-    set(log_ctrl_needed YES)
+    set(atomic_needed YES)
+    set(cli_api_needed YES)
+    set(delay_needed YES)
     set(fstorage_needed YES)
     set(log_needed YES)
-    set(util_needed YES)
-    set(cli_api_needed YES)
-    set(atomic_needed YES)
+    set(log_api_needed YES)
+    set(log_ctrl_needed YES)
     set(queue_needed YES)
-    set(delay_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "cli_libuarte"
@@ -118,26 +118,26 @@ if(cli_libuarte_needed OR (cli_libuarte IN_LIST components))
     set(cli_libuarte_needed YES)
     # Dependencies:
     set(cli_api_needed YES)
-    set(timer_needed YES)
     set(libuarte_needed YES)
-    set(ringbuf_needed YES)
-    set(util_needed YES)
     set(libuarte_async_needed YES)
     set(log_api_needed YES)
+    set(ringbuf_needed YES)
+    set(timer_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "cli"
 if(cli_needed OR (cli IN_LIST components))
     set(cli_needed YES)
     # Dependencies:
-    set(cli_api_needed YES)
-    set(util_needed YES)
-    set(log_needed YES)
     set(atomic_needed YES)
-    set(log_api_needed YES)
-    set(fnmatch_needed YES)
-    set(pwr_mgmt_needed YES)
+    set(cli_api_needed YES)
     set(delay_needed YES)
+    set(fnmatch_needed YES)
+    set(log_needed YES)
+    set(log_api_needed YES)
+    set(pwr_mgmt_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "block_dev_sdc"
@@ -152,8 +152,8 @@ endif()
 if(twi_mngr_needed OR (twi_mngr IN_LIST components))
     set(twi_mngr_needed YES)
     # Dependencies:
-    set(queue_needed YES)
     set(drv_twi_needed YES)
+    set(queue_needed YES)
     set(util_needed YES)
 endif()
 
@@ -162,62 +162,62 @@ if(sdcard_needed OR (sdcard IN_LIST components))
     set(sdcard_needed YES)
     # Dependencies:
     set(config_needed YES)
-    set(util_needed YES)
     set(drv_spi_needed YES)
-    set(protothreads_needed YES)
     set(hal_gpio_needed YES)
+    set(protothreads_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "log"
 if(log_needed OR (log IN_LIST components))
     set(log_needed YES)
     # Dependencies:
-    set(log_ctrl_needed YES)
-    set(fprintf_needed YES)
-    set(memobj_needed YES)
-    set(util_needed YES)
-    set(cli_api_needed YES)
-    set(log_api_needed YES)
-    set(section_vars_needed YES)
     set(atomic_needed YES)
+    set(cli_api_needed YES)
     set(fds_needed YES)
+    set(fprintf_needed YES)
+    set(log_api_needed YES)
+    set(log_ctrl_needed YES)
+    set(memobj_needed YES)
     set(ringbuf_needed YES)
+    set(section_vars_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "libuarte_async"
 if(libuarte_async_needed OR (libuarte_async IN_LIST components))
     set(libuarte_async_needed YES)
     # Dependencies:
-    set(hal_uarte_needed YES)
-    set(util_needed YES)
-    set(nrfx_rtc_needed YES)
-    set(queue_needed YES)
     set(balloc_needed YES)
-    set(nrfx_timer_needed YES)
-    set(libuarte_needed YES)
-    set(nrfx_ppi_needed YES)
-    set(hal_uart_needed YES)
     set(config_needed YES)
-    set(nrfx_clock_needed YES)
+    set(hal_uart_needed YES)
+    set(hal_uarte_needed YES)
+    set(libuarte_needed YES)
     set(log_api_needed YES)
+    set(nrfx_clock_needed YES)
+    set(nrfx_ppi_needed YES)
+    set(nrfx_rtc_needed YES)
+    set(nrfx_timer_needed YES)
+    set(queue_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "drv_usbd"
 if(drv_usbd_needed OR (drv_usbd IN_LIST components))
     set(drv_usbd_needed YES)
     # Dependencies:
-    set(nrfx_usbd_needed YES)
     set(nrfx_needed YES)
+    set(nrfx_usbd_needed YES)
 endif()
 
 # Build dependencies of component "drv_power"
 if(drv_power_needed OR (drv_power IN_LIST components))
     set(drv_power_needed YES)
     # Dependencies:
-    set(nrfx_power_needed YES)
-    set(util_needed YES)
-    set(softdevice_common_needed YES)
     set(drv_clock_needed YES)
+    set(nrfx_power_needed YES)
+    set(softdevice_common_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "cli_uart"
@@ -226,10 +226,10 @@ if(cli_uart_needed OR (cli_uart IN_LIST components))
     # Dependencies:
     set(cli_api_needed YES)
     set(drv_uart_needed YES)
-    set(timer_needed YES)
-    set(ringbuf_needed YES)
-    set(util_needed YES)
     set(log_api_needed YES)
+    set(ringbuf_needed YES)
+    set(timer_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "cli_rtt"
@@ -237,58 +237,58 @@ if(cli_rtt_needed OR (cli_rtt IN_LIST components))
     set(cli_rtt_needed YES)
     # Dependencies:
     set(cli_api_needed YES)
+    set(delay_needed YES)
+    set(segger_rtt_needed YES)
     set(timer_needed YES)
     set(util_needed YES)
-    set(segger_rtt_needed YES)
-    set(delay_needed YES)
 endif()
 
 # Build dependencies of component "cli_ble_uart"
 if(cli_ble_uart_needed OR (cli_ble_uart IN_LIST components))
     set(cli_ble_uart_needed YES)
     # Dependencies:
+    set(ble_gatt_needed YES)
+    set(cli_api_needed YES)
+    set(log_api_needed YES)
+    set(ringbuf_needed YES)
     set(softdevice_needed YES)
     set(timer_needed YES)
-    set(cli_api_needed YES)
     set(util_needed YES)
-    set(ble_gatt_needed YES)
-    set(ringbuf_needed YES)
-    set(log_api_needed YES)
 endif()
 
 # Build dependencies of component "button"
 if(button_needed OR (button IN_LIST components))
     set(button_needed YES)
     # Dependencies:
+    set(button_api_needed YES)
     set(drv_gpiote_needed YES)
     set(timer_needed YES)
     set(util_needed YES)
-    set(button_api_needed YES)
 endif()
 
 # Build dependencies of component "bsp_nfc"
 if(bsp_nfc_needed OR (bsp_nfc IN_LIST components))
     set(bsp_nfc_needed YES)
     # Dependencies:
-    set(util_needed YES)
     set(bsp_api_needed YES)
     set(mdk_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "bsp_cli"
 if(bsp_cli_needed OR (bsp_cli IN_LIST components))
     set(bsp_cli_needed YES)
     # Dependencies:
-    set(cli_api_needed YES)
     set(bsp_api_needed YES)
+    set(cli_api_needed YES)
 endif()
 
 # Build dependencies of component "bsp_btn_ble"
 if(bsp_btn_ble_needed OR (bsp_btn_ble IN_LIST components))
     set(bsp_btn_ble_needed YES)
     # Dependencies:
-    set(softdevice_needed YES)
     set(bsp_api_needed YES)
+    set(softdevice_needed YES)
     set(softdevice_common_needed YES)
 endif()
 
@@ -296,32 +296,32 @@ endif()
 if(bsp_btn_ant_needed OR (bsp_btn_ant IN_LIST components))
     set(bsp_btn_ant_needed YES)
     # Dependencies:
-    set(util_needed YES)
-    set(softdevice_common_needed YES)
     set(bsp_api_needed YES)
+    set(softdevice_common_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "bsp"
 if(bsp_needed OR (bsp IN_LIST components))
     set(bsp_needed YES)
     # Dependencies:
+    set(boards_needed YES)
+    set(bsp_api_needed YES)
+    set(button_api_needed YES)
+    set(hal_gpio_needed YES)
+    set(mdk_needed YES)
+    set(softdevice_needed YES)
     set(timer_needed YES)
     set(util_needed YES)
-    set(boards_needed YES)
-    set(mdk_needed YES)
-    set(bsp_api_needed YES)
-    set(hal_gpio_needed YES)
-    set(button_api_needed YES)
-    set(softdevice_needed YES)
 endif()
 
 # Build dependencies of component "block_dev_qspi"
 if(block_dev_qspi_needed OR (block_dev_qspi IN_LIST components))
     set(block_dev_qspi_needed YES)
     # Dependencies:
-    set(log_api_needed YES)
     set(block_dev_needed YES)
     set(drv_qspi_needed YES)
+    set(log_api_needed YES)
     set(util_needed YES)
 endif()
 
@@ -331,35 +331,35 @@ if(app_uart_fifo_needed OR (app_uart_fifo IN_LIST components))
     # Dependencies:
     set(app_uart_api_needed YES)
     set(drv_uart_needed YES)
-    set(util_needed YES)
     set(fifo_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "app_uart_blocking"
 if(app_uart_blocking_needed OR (app_uart_blocking IN_LIST components))
     set(app_uart_blocking_needed YES)
     # Dependencies:
+    set(app_uart_api_needed YES)
     set(drv_uart_needed YES)
     set(util_needed YES)
-    set(app_uart_api_needed YES)
 endif()
 
 # Build dependencies of component "pwr_mgmt"
 if(pwr_mgmt_needed OR (pwr_mgmt IN_LIST components))
     set(pwr_mgmt_needed YES)
     # Dependencies:
-    set(section_iter_needed YES)
-    set(util_needed YES)
-    set(scheduler_needed YES)
-    set(timer_needed YES)
-    set(softdevice_needed YES)
-    set(mutex_needed YES)
-    set(softdevice_common_needed YES)
-    set(mdk_needed YES)
-    set(hal_power_needed YES)
     set(hal_gpio_needed YES)
-    set(log_ctrl_needed YES)
+    set(hal_power_needed YES)
     set(log_api_needed YES)
+    set(log_ctrl_needed YES)
+    set(mdk_needed YES)
+    set(mutex_needed YES)
+    set(scheduler_needed YES)
+    set(section_iter_needed YES)
+    set(softdevice_needed YES)
+    set(softdevice_common_needed YES)
+    set(timer_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "nrfx_usbd"
@@ -376,68 +376,68 @@ if(log_default_backends_needed OR (log_default_backends IN_LIST components))
     set(log_default_backends_needed YES)
     # Dependencies:
     set(config_needed YES)
-    set(util_needed YES)
     set(log_api_needed YES)
     set(log_backend_rtt_needed YES)
     set(log_backend_uart_needed YES)
     set(log_ctrl_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "libuarte"
 if(libuarte_needed OR (libuarte IN_LIST components))
     set(libuarte_needed YES)
     # Dependencies:
-    set(hal_uarte_needed YES)
-    set(util_needed YES)
-    set(nrfx_timer_needed YES)
-    set(nrfx_ppi_needed YES)
     set(config_needed YES)
     set(hal_gpio_needed YES)
+    set(hal_uarte_needed YES)
     set(log_api_needed YES)
+    set(nrfx_ppi_needed YES)
+    set(nrfx_timer_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "hardfault"
 if(hardfault_needed OR (hardfault IN_LIST components))
     set(hardfault_needed YES)
     # Dependencies:
+    set(log_api_needed YES)
+    set(log_ctrl_needed YES)
     set(mdk_needed YES)
     set(softdevice_needed YES)
     set(util_needed YES)
-    set(log_ctrl_needed YES)
-    set(log_api_needed YES)
 endif()
 
 # Build dependencies of component "fds"
 if(fds_needed OR (fds IN_LIST components))
     set(fds_needed YES)
     # Dependencies:
-    set(util_needed YES)
-    set(config_needed YES)
-    set(softdevice_needed YES)
-    set(crc16_needed YES)
-    set(fstorage_needed YES)
     set(atomic_needed YES)
     set(atomic_fifo_needed YES)
+    set(config_needed YES)
+    set(crc16_needed YES)
+    set(fstorage_needed YES)
+    set(softdevice_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "drv_uart"
 if(drv_uart_needed OR (drv_uart IN_LIST components))
     set(drv_uart_needed YES)
     # Dependencies:
-    set(nrfx_uarte_needed YES)
-    set(nrfx_uart_needed YES)
     set(nrfx_needed YES)
+    set(nrfx_uart_needed YES)
+    set(nrfx_uarte_needed YES)
 endif()
 
 # Build dependencies of component "drv_twi"
 if(drv_twi_needed OR (drv_twi IN_LIST components))
     set(drv_twi_needed YES)
     # Dependencies:
-    set(nrfx_twim_needed YES)
-    set(nrfx_twi_needed YES)
-    set(nrfx_needed YES)
-    set(hal_gpio_needed YES)
     set(delay_needed YES)
+    set(hal_gpio_needed YES)
+    set(nrfx_needed YES)
+    set(nrfx_twi_needed YES)
+    set(nrfx_twim_needed YES)
 endif()
 
 # Build dependencies of component "drv_timer"
@@ -451,9 +451,9 @@ endif()
 if(drv_spi_needed OR (drv_spi IN_LIST components))
     set(drv_spi_needed YES)
     # Dependencies:
+    set(nrfx_needed YES)
     set(nrfx_spi_needed YES)
     set(nrfx_spim_needed YES)
-    set(nrfx_needed YES)
 endif()
 
 # Build dependencies of component "drv_rtc"
@@ -488,24 +488,24 @@ endif()
 if(drv_clock_needed OR (drv_clock IN_LIST components))
     set(drv_clock_needed YES)
     # Dependencies:
-    set(nrfx_clock_needed YES)
-    set(util_needed YES)
-    set(softdevice_common_needed YES)
     set(log_api_needed YES)
+    set(nrfx_clock_needed YES)
+    set(softdevice_common_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "cli_api"
 if(cli_api_needed OR (cli_api IN_LIST components))
     set(cli_api_needed YES)
     # Dependencies:
-    set(memobj_needed YES)
-    set(section_vars_needed YES)
-    set(util_needed YES)
-    set(fprintf_needed YES)
-    set(queue_needed YES)
-    set(log_ctrl_needed YES)
-    set(task_manager_needed YES)
     set(config_needed YES)
+    set(fprintf_needed YES)
+    set(log_ctrl_needed YES)
+    set(memobj_needed YES)
+    set(queue_needed YES)
+    set(section_vars_needed YES)
+    set(task_manager_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "bsp_api"
@@ -520,24 +520,24 @@ endif()
 if(ble_conn_params_needed OR (ble_conn_params IN_LIST components))
     set(ble_conn_params_needed YES)
     # Dependencies:
-    set(util_needed YES)
-    set(softdevice_needed YES)
-    set(timer_needed YES)
-    set(softdevice_common_needed YES)
     set(ble_conn_state_needed YES)
     set(mdk_needed YES)
+    set(softdevice_needed YES)
+    set(softdevice_common_needed YES)
+    set(timer_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "app_error_handler"
 if(app_error_handler_needed OR (app_error_handler IN_LIST components))
     set(app_error_handler_needed YES)
     # Dependencies:
-    set(util_needed YES)
+    set(log_api_needed YES)
+    set(log_ctrl_needed YES)
     set(mdk_needed YES)
     set(softdevice_needed YES)
     set(strerror_needed YES)
-    set(log_ctrl_needed YES)
-    set(log_api_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "timer"
@@ -545,22 +545,22 @@ if(timer_needed OR (timer IN_LIST components))
     set(timer_needed YES)
     # Dependencies:
     set(config_needed YES)
-    set(util_needed YES)
-    set(mdk_needed YES)
-    set(sortlist_needed YES)
+    set(delay_needed YES)
     set(log_api_needed YES)
+    set(mdk_needed YES)
     set(scheduler_needed YES)
     set(softdevice_needed YES)
-    set(delay_needed YES)
+    set(sortlist_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "nrfx_uarte"
 if(nrfx_uarte_needed OR (nrfx_uarte IN_LIST components))
     set(nrfx_uarte_needed YES)
     # Dependencies:
+    set(hal_gpio_needed YES)
     set(hal_uarte_needed YES)
     set(nrfx_needed YES)
-    set(hal_gpio_needed YES)
     set(prs_needed YES)
 endif()
 
@@ -568,9 +568,9 @@ endif()
 if(nrfx_uart_needed OR (nrfx_uart IN_LIST components))
     set(nrfx_uart_needed YES)
     # Dependencies:
+    set(hal_gpio_needed YES)
     set(hal_uart_needed YES)
     set(nrfx_needed YES)
-    set(hal_gpio_needed YES)
     set(prs_needed YES)
 endif()
 
@@ -578,9 +578,9 @@ endif()
 if(nrfx_twim_needed OR (nrfx_twim IN_LIST components))
     set(nrfx_twim_needed YES)
     # Dependencies:
+    set(hal_gpio_needed YES)
     set(hal_twim_needed YES)
     set(nrfx_needed YES)
-    set(hal_gpio_needed YES)
     set(prs_needed YES)
 endif()
 
@@ -588,9 +588,9 @@ endif()
 if(nrfx_twi_needed OR (nrfx_twi IN_LIST components))
     set(nrfx_twi_needed YES)
     # Dependencies:
+    set(hal_gpio_needed YES)
     set(hal_twi_needed YES)
     set(nrfx_needed YES)
-    set(hal_gpio_needed YES)
     set(prs_needed YES)
 endif()
 
@@ -614,9 +614,9 @@ endif()
 if(nrfx_spim_needed OR (nrfx_spim IN_LIST components))
     set(nrfx_spim_needed YES)
     # Dependencies:
+    set(hal_gpio_needed YES)
     set(hal_spim_needed YES)
     set(nrfx_needed YES)
-    set(hal_gpio_needed YES)
     set(prs_needed YES)
 endif()
 
@@ -624,9 +624,9 @@ endif()
 if(nrfx_spi_needed OR (nrfx_spi IN_LIST components))
     set(nrfx_spi_needed YES)
     # Dependencies:
+    set(hal_gpio_needed YES)
     set(hal_spi_needed YES)
     set(nrfx_needed YES)
-    set(hal_gpio_needed YES)
     set(prs_needed YES)
 endif()
 
@@ -659,9 +659,9 @@ if(nrfx_power_needed OR (nrfx_power IN_LIST components))
     set(nrfx_power_needed YES)
     # Dependencies:
     set(hal_power_needed YES)
-    set(nrfx_power_clock_needed YES)
-    set(nrfx_needed YES)
     set(hal_regulators_needed YES)
+    set(nrfx_needed YES)
+    set(nrfx_power_clock_needed YES)
 endif()
 
 # Build dependencies of component "nrfx_gpiote"
@@ -679,8 +679,8 @@ if(nrfx_clock_needed OR (nrfx_clock IN_LIST components))
     set(nrfx_clock_needed YES)
     # Dependencies:
     set(hal_clock_needed YES)
-    set(nrfx_power_clock_needed YES)
     set(nrfx_needed YES)
+    set(nrfx_power_clock_needed YES)
 endif()
 
 # Build dependencies of component "log_ctrl"
@@ -688,42 +688,42 @@ if(log_ctrl_needed OR (log_ctrl IN_LIST components))
     set(log_ctrl_needed YES)
     # Dependencies:
     set(config_needed YES)
-    set(util_needed YES)
     set(log_api_needed YES)
     set(memobj_needed YES)
     set(section_vars_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "fstorage"
 if(fstorage_needed OR (fstorage IN_LIST components))
     set(fstorage_needed YES)
     # Dependencies:
-    set(section_vars_needed YES)
-    set(util_needed YES)
-    set(config_needed YES)
-    set(log_api_needed YES)
     set(atomic_needed YES)
+    set(atomic_fifo_needed YES)
+    set(config_needed YES)
     set(hal_nvmc_needed YES)
+    set(log_api_needed YES)
+    set(section_vars_needed YES)
     set(softdevice_needed YES)
     set(softdevice_common_needed YES)
-    set(atomic_fifo_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "button_api"
 if(button_api_needed OR (button_api IN_LIST components))
     set(button_api_needed YES)
     # Dependencies:
-    set(util_needed YES)
-    set(mdk_needed YES)
     set(hal_gpio_needed YES)
+    set(mdk_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "boards"
 if(boards_needed OR (boards IN_LIST components))
     set(boards_needed YES)
     # Dependencies:
-    set(util_needed YES)
     set(hal_gpio_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "ble_link_ctx_manager"
@@ -738,12 +738,12 @@ endif()
 if(task_manager_needed OR (task_manager IN_LIST components))
     set(task_manager_needed YES)
     # Dependencies:
-    set(util_needed YES)
-    set(mdk_needed YES)
-    set(cli_api_needed YES)
     set(atomic_needed YES)
-    set(mpu_needed YES)
+    set(cli_api_needed YES)
     set(log_api_needed YES)
+    set(mdk_needed YES)
+    set(mpu_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "prs"
@@ -771,9 +771,9 @@ endif()
 if(memobj_needed OR (memobj IN_LIST components))
     set(memobj_needed YES)
     # Dependencies:
+    set(atomic_needed YES)
     set(balloc_needed YES)
     set(util_needed YES)
-    set(atomic_needed YES)
 endif()
 
 # Build dependencies of component "hal_usbd"
@@ -913,22 +913,22 @@ endif()
 if(ble_conn_state_needed OR (ble_conn_state IN_LIST components))
     set(ble_conn_state_needed YES)
     # Dependencies:
-    set(softdevice_needed YES)
     set(atomic_needed YES)
+    set(atomic_flags_needed YES)
+    set(softdevice_needed YES)
     set(softdevice_common_needed YES)
     set(util_needed YES)
-    set(atomic_flags_needed YES)
 endif()
 
 # Build dependencies of component "ble_advertising"
 if(ble_advertising_needed OR (ble_advertising IN_LIST components))
     set(ble_advertising_needed YES)
     # Dependencies:
-    set(softdevice_needed YES)
     set(ble_advdata_needed YES)
+    set(log_api_needed YES)
+    set(softdevice_needed YES)
     set(softdevice_common_needed YES)
     set(util_needed YES)
-    set(log_api_needed YES)
 endif()
 
 # Build dependencies of component "sortlist"
@@ -936,8 +936,8 @@ if(sortlist_needed OR (sortlist IN_LIST components))
     set(sortlist_needed YES)
     # Dependencies:
     set(config_needed YES)
-    set(util_needed YES)
     set(log_api_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "softdevice_common"
@@ -946,18 +946,18 @@ if(softdevice_common_needed OR (softdevice_common IN_LIST components))
     # Dependencies:
     set(config_needed YES)
     set(section_iter_needed YES)
-    set(util_needed YES)
     set(softdevice_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "queue"
 if(queue_needed OR (queue IN_LIST components))
     set(queue_needed YES)
     # Dependencies:
-    set(util_needed YES)
-    set(section_vars_needed YES)
-    set(log_api_needed YES)
     set(cli_api_needed YES)
+    set(log_api_needed YES)
+    set(section_vars_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "nrfx"
@@ -965,28 +965,28 @@ if(nrfx_needed OR (nrfx IN_LIST components))
     set(nrfx_needed YES)
     # Dependencies:
     set(config_needed YES)
-    set(util_needed YES)
     set(log_api_needed YES)
     set(mdk_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "mpu"
 if(mpu_needed OR (mpu IN_LIST components))
     set(mpu_needed YES)
     # Dependencies:
-    set(util_needed YES)
-    set(config_needed YES)
     set(cli_api_needed YES)
-    set(mdk_needed YES)
+    set(config_needed YES)
     set(log_api_needed YES)
+    set(mdk_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "block_dev_ram"
 if(block_dev_ram_needed OR (block_dev_ram IN_LIST components))
     set(block_dev_ram_needed YES)
     # Dependencies:
-    set(log_api_needed YES)
     set(block_dev_needed YES)
+    set(log_api_needed YES)
     set(util_needed YES)
 endif()
 
@@ -994,8 +994,8 @@ endif()
 if(block_dev_empty_needed OR (block_dev_empty IN_LIST components))
     set(block_dev_empty_needed YES)
     # Dependencies:
-    set(log_api_needed YES)
     set(block_dev_needed YES)
+    set(log_api_needed YES)
     set(util_needed YES)
 endif()
 
@@ -1003,43 +1003,43 @@ endif()
 if(ble_scan_needed OR (ble_scan IN_LIST components))
     set(ble_scan_needed YES)
     # Dependencies:
-    set(softdevice_needed YES)
-    set(config_needed YES)
-    set(util_needed YES)
     set(ble_advdata_needed YES)
+    set(config_needed YES)
     set(log_api_needed YES)
+    set(softdevice_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "ble_gatt"
 if(ble_gatt_needed OR (ble_gatt IN_LIST components))
     set(ble_gatt_needed YES)
     # Dependencies:
-    set(softdevice_needed YES)
     set(config_needed YES)
-    set(util_needed YES)
     set(log_api_needed YES)
+    set(softdevice_needed YES)
     set(strerror_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "ble_db_discovery"
 if(ble_db_discovery_needed OR (ble_db_discovery IN_LIST components))
     set(ble_db_discovery_needed YES)
     # Dependencies:
-    set(softdevice_needed YES)
     set(ble_common_needed YES)
-    set(util_needed YES)
     set(log_api_needed YES)
+    set(softdevice_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "balloc"
 if(balloc_needed OR (balloc IN_LIST components))
     set(balloc_needed YES)
     # Dependencies:
-    set(config_needed YES)
-    set(util_needed YES)
-    set(section_vars_needed YES)
-    set(log_api_needed YES)
     set(cli_api_needed YES)
+    set(config_needed YES)
+    set(log_api_needed YES)
+    set(section_vars_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "atomic_fifo"
@@ -1047,17 +1047,17 @@ if(atomic_fifo_needed OR (atomic_fifo IN_LIST components))
     set(atomic_fifo_needed YES)
     # Dependencies:
     set(config_needed YES)
-    set(util_needed YES)
     set(log_api_needed YES)
     set(mdk_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "section_iter"
 if(section_iter_needed OR (section_iter IN_LIST components))
     set(section_iter_needed YES)
     # Dependencies:
-    set(util_needed YES)
     set(section_vars_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "ringbuf"
@@ -1081,12 +1081,12 @@ endif()
 if(log_api_needed OR (log_api IN_LIST components))
     set(log_api_needed YES)
     # Dependencies:
-    set(util_needed YES)
-    set(section_vars_needed YES)
-    set(strerror_needed YES)
     set(config_needed YES)
     set(mdk_needed YES)
+    set(section_vars_needed YES)
     set(softdevice_needed YES)
+    set(strerror_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "fatfs"
@@ -1100,9 +1100,9 @@ endif()
 if(atomic_flags_needed OR (atomic_flags IN_LIST components))
     set(atomic_flags_needed YES)
     # Dependencies:
-    set(util_needed YES)
     set(atomic_needed YES)
     set(mdk_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "strerror"
@@ -1116,8 +1116,8 @@ endif()
 if(segger_rtt_needed OR (segger_rtt IN_LIST components))
     set(segger_rtt_needed YES)
     # Dependencies:
-    set(util_needed YES)
     set(config_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "section_vars"
@@ -1131,9 +1131,9 @@ endif()
 if(scheduler_needed OR (scheduler IN_LIST components))
     set(scheduler_needed YES)
     # Dependencies:
-    set(util_needed YES)
     set(config_needed YES)
     set(softdevice_needed YES)
+    set(util_needed YES)
 endif()
 
 # Build dependencies of component "fprintf"
@@ -1238,8 +1238,8 @@ endif()
 if(ble_common_needed OR (ble_common IN_LIST components))
     set(ble_common_needed YES)
     # Dependencies:
-    set(softdevice_needed YES)
     set(config_needed YES)
+    set(softdevice_needed YES)
 endif()
 
 # Build dependencies of component "softdevice"
