@@ -1,161 +1,161 @@
-# Repository
+# CMake enabled, LLVM compatible nRF5 SDK
 
-## Branches
+## Contents:
+ - [`tools/nrf5-llvm/`](tools/nrf5-llvm/):
+   Tools to patch the nRF SDK for the use with LLVM,
+   forked from [nrf5-llvm by Emmanuel Blot](https://github.com/eblot/nrf5-llvm).
+   These are made available under the MIT license.
+ - [`sdk/`](sdk/):
+   The Nordic SDK, already patched for use with LLVM,
+   minus the two `.msi` installers and the `external_tools` directory.
+   These files are mostly copyright by Nordic,
+   refer to [`sdk/documentation/licenses.txt`](sdk/documentation/licenses.txt)
+   for information about the various licenses in use.
+ - [`cmake/`](cmake/):
+   CMake files exposing the SDK as a number of libraries,
+   trying to follow modern CMake.
+
+## CMake usage documentation
+
+Include the top-level CMakeLists file:
+```cmake
+add_subdirectory(<path-to-this-README-file>)
+```
+This will make available a number of cmake functions (see further down for detailed documentation):
+ - `nrf_add_image`: Main entry-point, wrapper around `add_executable`,
+   handles linker-scripts and conversion to hex (and hopefully soon optional concatenation with softdevice).
+   Optionally also includes the SDK.
+ - `nrf_add_sdk`: Creates a CMake target (or adds to an existing one) with the requested SDK modules,
+   handling dependencies as far as possible.
+ - `nrf_get_device_properties`: Helper to determine compilation flags and related properties for some Nordic devices.
+
+### `nrf_add_image`
+
+`nrf_add_image` has the following signature:
+```cmake
+nrf_add_image(<target_name>
+    [ADD_SDK_DIRECTLY]
+    DEVICE <device>
+    [SOFTDEVICE <softdevice>]
+    LINKER_SCRIPT <linker_script>
+    [SOURCES <source>...]
+    [LINK_FLAGS <flags>...]
+    [<extra arguments passed to nrf_add_sdk>...]
+)
+```
+The command creates a new CMake executable target if `<target_name>` is not defined yet,
+and adds the sources `<source>...` to it.
+It sets the `LINK_FLAGS` property so the `<linker_script>` is loaded
+and the proper flags for compilation against a Nordic device of type `<device>` are added.
+Extra link flags can be given as `<flags>...`.
+If `ADD_SDK_DIRECTLY` is set, the requested SDK sources are added to the target
+directly, by invoking `nrf_add_sdk` on the target, passing it any additional args.
+See below for more information.
+Alternatively, you may invoke `nrf_add_sdk` separately and
+call `target_link_libraries` to link the SDK to the image.
+
+Accepted values:
+ - `DEVICE <device>`: Any of
+   * `nrf52810_xxaa`
+   * `nrf52811_xxaa`
+   * `nrf52832_xxaa`
+   * `nrf52810_xxaa`
+ - `SOFTDEVICE <softdevice>`: Any of
+   * `nosd`: No softdevice (default)
+   * `mbr`: No softdevice, but a master boot record is present
+   # `s112`
+   # `s132`
+   # `s140`
+
+### `nrf_add_sdk`
+
+`nrf_add_sdk` has the following signature:
+```cmake
+nrf_add_sdk(<target_name>
+    [MODULE_LIBRARIES]
+    DEVICE <device>
+    [SOFTDEVICE <softdevice>]
+    CONFIG_PATH <path-to-sdk_config>
+    MODULES <module>...
+)
+```
+This command creates a new CMake static library target if `<target_name>` is not defined yet,
+and links the requested nRF SDK modules against it.
+Specify the list of modules following the `MODULES` keyword.
+See below for more information on how to identify modules.
+If `MODULE_LIBRARIES` is set, each module with sources gets it's own CMake library target,
+named `<target_name>_<module>`.
+This is great for localisation of include and link dependencies as well as compile defines,
+but creates a lot of clutter in GUIs that cannot hide auxiliary targets.
+Without `MODULE_LIBRARIES`, all sources are added directly to `<target_name>`,
+while the headers are associated with separate `<target_name>_<module>` interface libraries.
+All modules link against the `sdk_config.h` header, whose path needs to be given after `CONFIG_PATH`.
+If you need to pass additional compile definitions, add them to the `<target_name>_cfg`
+interface target which is also linked by all modules (irrespective if `MODULE_LIBRARIES` is given or not).
+For example:
+```cmake
+target_compile_definitions(<target_name>_cfg INTERFACE
+    -DBSP_DEFINES_ONLY
+)
+target_compile_options(<target_name>_cfg INTERFACE
+    -Wall
+    -Werror
+    -ffunction-sections
+    -fdata-sections
+    -fno-strict-aliasing
+    -fno-builtin
+    -fshort-enums
+)
+```
+
+Accepted values:
+ - `DEVICE <device>`: Any of
+   * `nrf52810_xxaa`
+   * `nrf52811_xxaa`
+   * `nrf52832_xxaa`
+   * `nrf52810_xxaa`
+ - `SOFTDEVICE <softdevice>`: Any of
+   * `nosd`: No softdevice (default)
+   * `mbr`: No softdevice, but a master boot record is present
+   # `s112`
+   # `s132`
+   # `s140`
+
+#### Module dependencies
+This project attempts to map all interdependencies between SDK modules.
+In many cases, simply select the modules whose headers you include directly,
+and everything should compile.
+However, some dependencies are optional and depending on settings in `sdk_config.h`,
+which we do not parse at the moment.
+In this case, you may need to include additional modules manually.
+In any case, search `cmake/modules.cmake` or `cmake/sources.cmake`
+for the files that are missing in your compilation to identify the requied modules
+(we list the headers as sources as well, for the benefit of GUI and for the purpose of module finding).
+
+Notable components with complex dependencies are:
+ - `log`: Practically every SDK module links against `nrf_log.h`,
+   which we expose in a module `log_api`, and is typically pulled in automatically.
+   If logging is enabled the module `log` needs to be included separately.
+   Furthermore, the backends also need to be included manually.
+ - `cli`: The CLI is an optional component for many SDK modules.
+   It needs to be included manually.
+ - `bsp`: The BSP module can be used header-only (module `bsp_api`),
+   or with implementation by manually including module `bsp`.
+ - `button`: The button module also has `button_api` and `button.`
+
+## Development
+
+### Why this project?
+ - Isolates the huge list of include directories and preprocessor defines
+   to source files that actually compile against the SDK.
+ - Some help on dependency management for the numerous SDK components.
+   Ideally, you only specify the SDK components that you actually use
+   in your own code and CMake derives the dependencies.
+
+### Branches
  - `nordic`: Contains the unmodified original Nordic nRF5 SDK.
    Downloaded using `tools/download-sdk.sh`
  - `patched`: Contains the SDK patched such that it compiles using llvm.
    Obtained by running `tools/patch-sdk.sh` on a unmodified sdk.
 Other branches may contain various modification, extensions and improvements.
 
-# nrf5-llvm
-
-Tools &amp; patches to build nRF5 SDK with LLVM/Clang toolchain
-
-- `nRF52-SDK-15.3-clang.dockerfile` is a dockerfile that applies all patches,
-  and builds a docker image ready for use with clang.
-  However, as it turns out, one still has to use the GCC toolchain,
-  which lacks a recent libstdc++, and has not libc++ at all.
-- `clang-arm-baremetal-toolchain.dockerfile` attempts to build a LLVM toolchain
-  from scratch. It doesn't seem to work as of now.
-
-## Overview
-
-This repository contains some tools and patches so that the Nordic Semi
-[nRF5 SDK](https://www.nordicsemi.com/eng/Products/Bluetooth-low-energy/nRF5-SDK)
-can be build with [Clang/LLVM](https://llvm.org) toolchain.
-
-It has been succesfully tested (real product) with nRF5 SDK v14.2 and is being
-tested with nRF5 SDK v15.0 and SDK v15.1, with SoftDevice v5 and v6 series.
-
-It is used with LLVM 6.0 series and 7.0-rc2 for arm-none-eabi Cortex-M4
-targets, i.e. with nRF52 SoCs. nRF51 has never been tested.
-
-Thw whole toolchain, including the Clang compiler, the integrated assembler and
-the LLVM linker `ld.lld` is used to build nRF52 executable.
-
-Your mileage may vary!
-
-## Important notice
-
-The software is provided "as is", without warranty of any kind. Please read
-the MIT license.
-
-It is not affiliated in any way with Nordic Semiconductor, and obviously NOT
-supported by Nordic Semiconductor. Be sure not to report issues that might be
-introduced by the use of these tools to Nordic Semi.
-
-The patches only tweak the files for the GCC toolchain, and try to be
-conservative, *i.e.* patched files should execute in the exact same way when
-GCC is used.
-
-The patched SVC calls are only activated when Clang is actually used to build,
-while some other fixes are also enabled when GCC is used.
-
-In any case, it is strongly advised to backup your original SDK files before
-applying these scripts. A source control system such as Git can help to check
-which and how files have been modified.
-
-Please also note that while these scripts enable building nRF52-based
-applications, they may not be enough to build - all - applications. The author
-has used them to build a BLE 4.x peripheral application with S132 SoftDevice
-on a nRF52832 SoC. Patches are warmly welcomed!
-
-## Requirements
-
-* LLVM/Clang toolchain
-  * v7 is recommended as v6 linker cannot work with NordicSemi linker scripts.
-    If v6 is used, you need to either tweak the LD scripts, and/or patch the
-    LLVM linker.
-* Python 3.5+ to run the scripts.
-* `patch` and EOL-converter tool such as `dos2unix`
-* Shell and common unix tools
-* nRF5 SDK v13 or greater
-
-## Tools
-
-### `nrfsvc.py`
-
-This tool patches some Nordic Semi header files to:
-
-  * Declare SVCALL macro as a static inline function
-  * Rewrite all SVCALLs to properly declare to the compiler which ARM registers
-    are used with SVC calls.
-
-     python3 nrfsvc.py -h
-
-     usage: nrfsvc.py [-h] [-u] -k {svc,wrap} [-d] dir
-
-     nRF5 service call adapter for CLANG/LLVM toolchain
-
-     positional arguments:
-       dir                   top directory to seek for header files
-
-     optional arguments:
-       -h, --help            show this help message and exit
-       -u, --update          update source file
-       -k {svc,wrap}, --kind {svc,wrap}
-                             Action to perform: "svc": Patch CALLs, "wrap": Patch
-                             SVCALL macros
-       -d, --debug           enable debug mode
-
-This script should be invoked twice:
-
-* once to tweak the SVCALL macro definition for Clang (`wrap`)
-* once to actually patch all the header files that declare SVC calls (`svc`).
-
-The script walks through the specified SDK directory to detect header files
-that need to be patched. It is not recommended to specify the top-level
-directory of the SDK distribution archive as the start directory, as the script
-would uselessly skim through the numerous examples files and third-party
-libraries.
-
-A good start point for patching SVC calls is to use the top-level SoftDevice
-directory, *i.e.* `components/softdevice`.
-
-### `nrfpatch.sh`
-
-To successfully use the patch command, you may need to first convert the
-original source file to Unix EOL using `dos2unix` file, apply the patch, then
-optionally revert back to Windows format using `unix2dos` utility. The patch
-utility has trouble working with the Windows EOL. Better: do not use Windows.
-
-This script wraps up the patch files to apply them w/o dealing with EOL issues.
-
-## Patches
-
-The following patches need to be applied with the `patch` command.
-
-Note that Nordic Semi distributes its SDK as Windows file: they use CRLF
-line ending, and even source files may be defined as executable due to the
-use of barely appropriate ZIP container.
-
-* `vmsr.patch` this patch is a generic patch for modern GCCs and Clang for
-  CMSIS header file. It is not specific to this SDK
-* `isr_vector.patch` is used to declare the `isr_vector` section as executable.
-  ISR vector is an array of addresses, *i.e* pure data, which is used by the
-  Cortex-M4 as a jump table to exception routines. It is stored within the
-  `.text`, *i.e.* executable code section. LLVM `ld.lld` does not accept
-  mixed-style sections, *i.e.* executable and code within the same section
-  declaration. It is right to do so, but this breaks most of the linker script
-  designed for Cortex-M series. This patch declares the isr_vector jump table
-  as executable as a workaround - the clean solution would be to rewrite all
-  the LD linker scripts.
-  Note that LLVM ld.lld may not safely detect this issue: depending on the
-  content and order of all object files it is given to link as the final
-  executable, various and hard-to-debug error messages may be raised, or even
-  worse: the final executable may be invalid, LLVM LD failing to compute the
-  LMA addressed for the `.data` section. Failing to fixing the isr_vector
-  definition may result in quite difficult issues to track and debug. YMMV.
-* `stack_ptr.h` fixes the retrieval of the current stack pointer value. Note
-  that this patch lacks extensive testing.
-* `error_handler.patch` fixes an ASM routine used to call the application
-  error handler call. The original code generates a pseudo assembly instruction
-  such as `ldr r0,=#1234`, but the LLVM integrated assembler does not accept
-  the `=#` syntax as an immediate value. The instruction is replaced with two
-  ARM `mov` instructions.
-* `remove-register-keyword.patch`: This follows a patch that has been accepted
-  upstream at CMSIS. In C++, the `register` keyword has no effect, was deprecated
-  in C++14 and forbidden in C++17. This patch simply removes it.
-* `fix-builtin.patch`: Fixes one place that triggers a warning in clang,
-  and an error in clang++.
-  
