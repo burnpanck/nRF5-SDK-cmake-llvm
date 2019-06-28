@@ -64,7 +64,11 @@ extern "C" {
  * @brief Macro checking if buffers should be stored in RAM.
  */
 #ifndef NRF_TWI_MNGR_BUFFERS_IN_RAM
-  #define NRF_TWI_MNGR_BUFFERS_IN_RAM defined(TWIM_PRESENT)
+  #if defined(TWIM_PRESENT)
+    #define NRF_TWI_MNGR_BUFFERS_IN_RAM 1
+  #else
+    #define NRF_TWI_MNGR_BUFFERS_IN_RAM 0
+  #endif
 #endif
 
 /**
