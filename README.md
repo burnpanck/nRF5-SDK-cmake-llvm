@@ -17,7 +17,25 @@
 
 ## CMake usage documentation
 
-Include the top-level CMakeLists file:
+### Toolchain
+The CMake files here try to make as little assumptions about the toolchain as possible.
+In general, a suitable toolchain needs to be setup already in the corresponding
+CMake variables.
+
+There is [a CMake toolchain file for the ARM-gcc toolchain](cmake/arm-none-eabi-gcc.toolchain.cmake),
+which will try to locate `arm-eabi-none-gcc` on the path.
+
+Alternatively [a sister-project building a LLVM-based toolchain](https://github.com/burnpanck/docker-llvm-armeabi)
+contains a suitable toolchain file.
+That toolchain is also available as
+[a docker image on docker hub](https://cloud.docker.com/u/burnpanck/repository/docker/burnpanck/llvm-armeabi-newlib),
+the toolchain file is found at `/toolchain/cmake/armv7em-eabi-none-toolchain.cmake`
+within the container.
+The toolchain still has it's rough edges,
+for example it does not support creating intel hex files, because `llvm-objcopy` doesn't.
+
+### Inlcude the SDK
+The SDK is most conveniently included as a CMake sub-directory.
 ```cmake
 add_subdirectory(<path-to-this-README-file>)
 ```
@@ -28,6 +46,8 @@ This will make available a number of cmake functions (see further down for detai
  - `nrf_add_sdk`: Creates a CMake target (or adds to an existing one) with the requested SDK modules,
    handling dependencies as far as possible.
  - `nrf_get_device_properties`: Helper to determine compilation flags and related properties for some Nordic devices.
+
+The same functions can also be imported by including [`cmake/nRF5-SDK.cmake`](cmak/nRF5-SDK.cmake).
 
 ### `nrf_add_image`
 
@@ -63,9 +83,9 @@ Accepted values:
  - `SOFTDEVICE <softdevice>`: Any of
    * `nosd`: No softdevice (default)
    * `mbr`: No softdevice, but a master boot record is present
-   # `s112`
-   # `s132`
-   # `s140`
+   * `s112`:
+   * `s132`:
+   * `s140`:
 
 ### `nrf_add_sdk`
 
@@ -117,9 +137,9 @@ Accepted values:
  - `SOFTDEVICE <softdevice>`: Any of
    * `nosd`: No softdevice (default)
    * `mbr`: No softdevice, but a master boot record is present
-   # `s112`
-   # `s132`
-   # `s140`
+   * `s112`:
+   * `s132`:
+   * `s140`:
 
 #### Module dependencies
 This project attempts to map all interdependencies between SDK modules.
@@ -158,4 +178,3 @@ Notable components with complex dependencies are:
  - `patched`: Contains the SDK patched such that it compiles using llvm.
    Obtained by running `tools/patch-sdk.sh` on a unmodified sdk.
 Other branches may contain various modification, extensions and improvements.
-
