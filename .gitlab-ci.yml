@@ -1,28 +1,83 @@
+image: burnpanck/llvm-armeabi-newlib:8.0
 stages:
-- build-toolchain
 - build
-
-# refer to https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
-# for most of the following
-.docker-build-base: &docker-build-base
+blinky_pca10056_mbr_nrf52840_xxaa:
+  stage: build
   tags:
   - docker
-  image: docker:git
-  services:
-  - docker:dind
-  variables:
-    CONTAINER_IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}/${CI_JOB_NAME}:${CI_BUILD_REF_NAME}
   script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build -f ${CI_JOB_NAME}.dockerfile -t ${CONTAINER_IMAGE} --build-arg CI_BUILD_REF_NAME=${CI_BUILD_REF_NAME} --build-arg http_proxy --build-arg no_proxy .
-    - docker push ${CONTAINER_IMAGE}
-
-homebrew-arm-toolchain:
-  stage: build-toolchain
-  <<: *docker-build-base
-
-nrf52-sdk-15.3-clang:
+  - mkdir build
+  - cd build
+  - cmake -GNinja -DCMAKE_TOOLCHAIN_FILE=/toolchain/cmake/armv7em-eabi-none-toolchain.cmake
+    ..
+  - cmake --build . --target blinky_pca10056_mbr_nrf52840_xxaa
+blinky_pca10056_nrf52840_xxaa:
   stage: build
-  <<: *docker-build-base
-
-
+  tags:
+  - docker
+  script:
+  - mkdir build
+  - cd build
+  - cmake -GNinja -DCMAKE_TOOLCHAIN_FILE=/toolchain/cmake/armv7em-eabi-none-toolchain.cmake
+    ..
+  - cmake --build . --target blinky_pca10056_nrf52840_xxaa
+rtc_pca10056_nrf52840_xxaa:
+  stage: build
+  tags:
+  - docker
+  script:
+  - mkdir build
+  - cd build
+  - cmake -GNinja -DCMAKE_TOOLCHAIN_FILE=/toolchain/cmake/armv7em-eabi-none-toolchain.cmake
+    ..
+  - cmake --build . --target rtc_pca10056_nrf52840_xxaa
+timer_pca10056_nrf52840_xxaa:
+  stage: build
+  tags:
+  - docker
+  script:
+  - mkdir build
+  - cd build
+  - cmake -GNinja -DCMAKE_TOOLCHAIN_FILE=/toolchain/cmake/armv7em-eabi-none-toolchain.cmake
+    ..
+  - cmake --build . --target timer_pca10056_nrf52840_xxaa
+twi_master_using_nrf_twi_mngr_pca10056_nrf52840_xxaa:
+  stage: build
+  tags:
+  - docker
+  script:
+  - mkdir build
+  - cd build
+  - cmake -GNinja -DCMAKE_TOOLCHAIN_FILE=/toolchain/cmake/armv7em-eabi-none-toolchain.cmake
+    ..
+  - cmake --build . --target twi_master_using_nrf_twi_mngr_pca10056_nrf52840_xxaa
+usbd_cdc_acm_pca10056_nrf52840_xxaa:
+  stage: build
+  tags:
+  - docker
+  script:
+  - mkdir build
+  - cd build
+  - cmake -GNinja -DCMAKE_TOOLCHAIN_FILE=/toolchain/cmake/armv7em-eabi-none-toolchain.cmake
+    ..
+  - cmake --build . --target usbd_cdc_acm_pca10056_nrf52840_xxaa
+usbd_msc_pca10056_nrf52840_xxaa:
+  stage: build
+  tags:
+  - docker
+  script:
+  - mkdir build
+  - cd build
+  - cmake -GNinja -DCMAKE_TOOLCHAIN_FILE=/toolchain/cmake/armv7em-eabi-none-toolchain.cmake
+    ..
+  - cmake --build . --target usbd_msc_pca10056_nrf52840_xxaa
+usbd_pca10056_nrf52840_xxaa:
+  stage: build
+  tags:
+  - docker
+  script:
+  - mkdir build
+  - cd build
+  - cmake -GNinja -DCMAKE_TOOLCHAIN_FILE=/toolchain/cmake/armv7em-eabi-none-toolchain.cmake
+    ..
+  - cmake --build . --target usbd_pca10056_nrf52840_xxaa

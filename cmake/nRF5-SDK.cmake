@@ -4,23 +4,6 @@ set(NRF5_SDK_ROOT "${CMAKE_CURRENT_LIST_DIR}/../sdk")
 include(${CMAKE_CURRENT_LIST_DIR}/modules.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/sources.cmake)
 
-# TODO: Detect arm-none-eabi-ld vs ld.lld
-if(NOT DEFINED TOOLCHAIN_LINK_FLAGS)
-    if(CMAKE_C_COMPILER_ID STREQUAL Clang)
-        set(TOOLCHAIN_LINK_FLAGS )
-    else()
-        set(TOOLCHAIN_LINK_FLAGS --specs=nano.specs)
-    endif()
-endif()
-
-if(NOT DEFINED TOOLCHAIN_LINK_LIBRARIES)
-    if(CMAKE_C_COMPILER_ID STREQUAL Clang)
-        set(TOOLCHAIN_LINK_LIBRARIES -l:crt0.o )
-    else()
-        set(TOOLCHAIN_LINK_LIBRARIES )# -Wl,--start-group -lgcc -lnosys -lc -Wl,--end-group )
-    endif()
-endif()
-
 
 function(nrf_get_device_properties target var_name)
     string(REGEX MATCH "^([nN][rR][fF](52810|52811|52832|52840)(_xx[a-z][a-z])?)$" target_numeric "${target}")
@@ -58,6 +41,23 @@ function(nrf_add_image target_name)
     set(multi_value_keywords SOURCES LINK_FLAGS) # passed on: MODULES
     cmake_parse_arguments(PARSE_ARGV 1 IMG "${option_keywords}" "${one_value_keywords}" "${multi_value_keywords}")
 
+    # TODO: Detect arm-none-eabi-ld vs ld.lld
+    if(NOT DEFINED TOOLCHAIN_LINK_FLAGS)
+        if(CMAKE_C_COMPILER_ID STREQUAL Clang)
+            set(TOOLCHAIN_LINK_FLAGS )
+        else()
+            set(TOOLCHAIN_LINK_FLAGS --specs=nano.specs)
+        endif()
+    endif()
+
+    if(NOT DEFINED TOOLCHAIN_LINK_LIBRARIES)
+        if(CMAKE_C_COMPILER_ID STREQUAL Clang)
+            set(TOOLCHAIN_LINK_LIBRARIES -l:crt0.o)
+        else()
+            set(TOOLCHAIN_LINK_LIBRARIES )# -Wl,--start-group -lgcc -lnosys -lc -Wl,--end-group )
+        endif()
+    endif()
+
     if((NOT DEFINED IMG_DEVICE) OR (IMG_DEVICE STREQUAL ""))
         message(SEND_ERROR "need to specify DEVICE parameter to nrf_add_image")
     endif()
@@ -72,9 +72,9 @@ function(nrf_add_image target_name)
             SOFTDEVICE "${IMG_SOFTDEVICE}"
             ${IMG_UNPARSED_ARGUMENTS}
         )
-        if(IMG_SOURCES)
-            target_sources(${target_name} PRIVATE ${IMG_SOURCES})
-        endif()
+    endif()
+    if(IMG_SOURCES)
+        target_sources(${target_name} PRIVATE ${IMG_SOURCES})
     endif()
     set(link_flags ${IMG_LINK_FLAGS})
     list(APPEND link_flags
@@ -90,11 +90,13 @@ function(nrf_add_image target_name)
         LINK_DEPENDS "${IMG_LINKER_SCRIPT}"
     )
     target_link_libraries(${target_name} PUBLIC ${TOOLCHAIN_LINK_LIBRARIES})
+    list(APPEND cmds COMMAND ${CMAKE_SIZE_UTIL} ${target_name}.out)
+    list(APPEND cmds COMMAND ${CMAKE_OBJCOPY} -O binary ${target_name}.out "${target_name}.bin")
+    if(NOT CMAKE_OBJCOPY_NO_SUPPORT_FOR_INTEL_HEX)
+        list(APPEND cmds COMMAND ${CMAKE_OBJCOPY} -O ihex ${target_name}.out "${target_name}.hex")
+    endif()
     add_custom_command(TARGET ${target_name}
-        POST_BUILD
-        COMMAND ${CMAKE_SIZE_UTIL} ${target_name}.out
-        COMMAND ${CMAKE_OBJCOPY} -O binary ${target_name}.out "${target_name}.bin"
-        COMMAND ${CMAKE_OBJCOPY} -O ihex ${target_name}.out "${target_name}.hex"
+        POST_BUILD ${cmds}
         COMMENT "post build steps for ${target_name}"
     )
 endfunction()
